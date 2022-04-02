@@ -9,6 +9,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UManaManager;
+class ULifeTimeComponent;
 
 /**
  * 
@@ -32,6 +33,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	UManaManager* ManaManager = nullptr;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
+	ULifeTimeComponent* LifeTimeComponent = nullptr;
 
 public:
 	virtual void Tick(float DeltaSeconds) override;
