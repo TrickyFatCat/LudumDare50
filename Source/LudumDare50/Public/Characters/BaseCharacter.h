@@ -22,8 +22,17 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	UDamageControllerComponent* DamageController = nullptr;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Animations")
+	UAnimMontage* DeathMontage = nullptr;
+
+	UFUNCTION()
+	void PlayDeathMontage(AController* DeathInstigator, AActor* DeathCauser, const UDamageType* DamageType);
+
 public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, Category="Character")
+	void OnDeathFinished();
 };

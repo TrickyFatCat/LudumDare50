@@ -6,12 +6,16 @@
 #include "Characters/BaseCharacter.h"
 #include "EnemyCharacter.generated.h"
 
-/**
- * 
- */
+class UBehaviorTree;
+
 UCLASS()
 class LUDUMDARE50_API AEnemyCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
+
+public:
+	AEnemyCharacter();
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="AI")
+	UBehaviorTree* BehaviorTreeAsset;
 };
