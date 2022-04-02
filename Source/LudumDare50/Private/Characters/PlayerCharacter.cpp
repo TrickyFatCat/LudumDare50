@@ -5,6 +5,7 @@
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/ManaManager.h"
 #include "Kismet/KismetMathLibrary.h"
 
 APlayerCharacter::APlayerCharacter()
@@ -14,6 +15,8 @@ APlayerCharacter::APlayerCharacter()
 
 	CameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
 	CameraComponent->SetupAttachment(SpringArmComponent);
+
+	ManaManager = CreateDefaultSubobject<UManaManager>("ManaManager");
 }
 
 void APlayerCharacter::BeginPlay()

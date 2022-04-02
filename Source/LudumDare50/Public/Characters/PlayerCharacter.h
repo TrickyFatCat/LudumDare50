@@ -8,6 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class UManaManager;
 
 /**
  * 
@@ -28,6 +29,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	UCameraComponent* CameraComponent = nullptr;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
+	UManaManager* ManaManager = nullptr;
 	
 public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
