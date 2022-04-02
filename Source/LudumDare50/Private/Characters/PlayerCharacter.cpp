@@ -5,6 +5,7 @@
 
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "Components/DamageControllerComponent.h"
 #include "Components/ManaManager.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -27,6 +28,9 @@ void APlayerCharacter::BeginPlay()
 void APlayerCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
+
+	if (DamageController->GetIsDead()) return;
+	
 	RotateTowardsCursor();
 }
 

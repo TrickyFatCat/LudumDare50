@@ -53,4 +53,7 @@ public:
 	static void CalculateTimelinePlayRate(UTimelineComponent* TimelineComponent,
 	                                      const UCurveBase* AnimationCurve,
 	                                      const float TargetTime = 1.f);
+
+	UFUNCTION(BlueprintCallable, Category="TrickyFunctionLibrary")
+	static void GameOver(const UObject* WorldContextObject);
 };
