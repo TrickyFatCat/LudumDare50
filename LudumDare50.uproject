@@ -7,7 +7,11 @@
 		{
 			"Name": "LudumDare50",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"TrickyPrototyping"
+			]
 		}
 	],
 	"Plugins": [
