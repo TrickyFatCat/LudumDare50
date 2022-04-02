@@ -32,8 +32,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="LifeTime")
 	float LifeTimerDuration = 20.f;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="LifeTime")
+	float RestoreStartDelay = 1.5f;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="LifeTime")
+	float RestoreTimeFactor = 1.f;
+
 	UPROPERTY(BlueprintReadOnly, Category="LifeTime")
-	float ElapsedDuration = 0;
+	float RemainingLifeTime = LifeTimerDuration;
 
 public:
 	virtual void TickComponent(float DeltaTime,

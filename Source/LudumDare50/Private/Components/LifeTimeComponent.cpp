@@ -46,7 +46,7 @@ void ULifeTimeComponent::StartLifeTimer()
 	TimerManager.SetTimer(LifeTimerHandle,
 	                      this,
 	                      &ULifeTimeComponent::DamageOwner,
-	                      LifeTimerDuration - ElapsedDuration,
+	                      RemainingLifeTime,
 	                      false);
 }
 
@@ -56,14 +56,14 @@ void ULifeTimeComponent::StopLifeTimer()
 
 	if (!TimerManager.IsTimerActive(LifeTimerHandle)) return;
 
-	ElapsedDuration = TimerManager.GetTimerRemaining(LifeTimerHandle);
+	RemainingLifeTime = TimerManager.GetTimerRemaining(LifeTimerHandle);
 	TimerManager.ClearTimer(LifeTimerHandle);
 	TimerManager.SetTimer(RestoreTimerHandle,
 	                      this,
 	                      &ULifeTimeComponent::RestoreTime,
 	                      UGameplayStatics::GetWorldDeltaSeconds(GetWorld()),
 	                      true,
-	                      1.5f);
+	                      RestoreStartDelay);
 }
 
 void ULifeTimeComponent::DamageOwner()
@@ -78,10 +78,10 @@ void ULifeTimeComponent::DamageOwner()
 
 void ULifeTimeComponent::RestoreTime()
 {
-	if (ElapsedDuration <= 0.f)
+	if (RemainingLifeTime >= LifeTimerDuration)
 	{
 		GetWorld()->GetTimerManager().ClearTimer(RestoreTimerHandle);
 	}
 
-	ElapsedDuration -= UGameplayStatics::GetWorldDeltaSeconds(GetWorld());
+	RemainingLifeTime += UGameplayStatics::GetWorldDeltaSeconds(GetWorld()) * RestoreTimeFactor;
 }
