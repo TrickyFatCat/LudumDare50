@@ -19,7 +19,7 @@ public:
 	UEnemyPerceptionComponent* EnemyPerceptionComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI")
-	FName FocusOnKeyName = "EnemyActor";
+	FName FocusOnKeyName = "PlayerActor";
     
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual  void Tick(float DeltaTime) override;
