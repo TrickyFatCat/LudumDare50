@@ -103,6 +103,7 @@ void AFloatingActorBase::StartMovement()
 	}
 
 	MovementTimeline->PlayFromStart();
+	ProcessMovementStart();
 	SetState(EFloatingActorState::Moving);
 }
 
@@ -126,6 +127,7 @@ void AFloatingActorBase::MoveToPoint(const int32 PointIndex)
 {
 	if (!IndexIsValid(PointIndex) || MovementMode != EFloatingActorMovementMode::Manual) return;
 
+	ProcessMovementStart();
 	NextPointIndex = PointIndex;
 	CalculateTravelTime();
 	UTrickyFunctionLibrary::CalculateTimelinePlayRate(MovementTimeline, Cast<UCurveBase>(MovementAnimationCurve), TravelTime);
@@ -143,7 +145,7 @@ void AFloatingActorBase::SetSpeed(const float Value)
 
 void AFloatingActorBase::SetTravelTime(const float Value)
 {
-	if (bUseTravelTime || Value <= 0.f) return;
+	if (!bUseTravelTime || Value <= 0.f) return;
 
 	TravelTime = Value;
 	UTrickyFunctionLibrary::CalculateTimelinePlayRate(MovementTimeline, Cast<UCurveBase>(MovementAnimationCurve), TravelTime);
@@ -215,11 +217,17 @@ void AFloatingActorBase::ContinueMovement()
 	else
 	{
 		MovementTimeline->PlayFromStart();
+		ProcessMovementStart();
 	}
 }
 
 void AFloatingActorBase::CalculateNextPointIndex()
 {
+}
+
+void AFloatingActorBase::ProcessMovementStart()
+{
+	OnMovementStarted.Broadcast();
 }
 
 void AFloatingActorBase::StartStopWaitTimer()

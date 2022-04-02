@@ -6,6 +6,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 #include "Components/DamageControllerComponent.h"
+#include "Components/LifeTimeComponent.h"
 #include "Components/ManaManager.h"
 #include "Kismet/KismetMathLibrary.h"
 
@@ -18,6 +19,8 @@ APlayerCharacter::APlayerCharacter()
 	CameraComponent->SetupAttachment(SpringArmComponent);
 
 	ManaManager = CreateDefaultSubobject<UManaManager>("ManaManager");
+
+	LifeTimeComponent = CreateDefaultSubobject<ULifeTimeComponent>("LifeTimeComponent");
 }
 
 void APlayerCharacter::BeginPlay()
