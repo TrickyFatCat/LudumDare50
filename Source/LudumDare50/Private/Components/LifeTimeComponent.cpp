@@ -20,6 +20,73 @@ void ULifeTimeComponent::SetLifeTimeDuration(const float Value)
 }
 
 
+float ULifeTimeComponent::GetNormalizedTime() const
+{
+	const FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+	const float RemainingTime = TimerManager.IsTimerActive(LifeTimerHandle)
+		                            ? TimerManager.GetTimerRemaining(LifeTimerHandle)
+		                            : RemainingLifeTime;
+	return RemainingTime / LifeTimerDuration;
+}
+
+bool ULifeTimeComponent::IncreaseRemainingTime(const float Amount)
+{
+	if (Amount <= 0.f || RemainingLifeTime <= 0.f || RemainingLifeTime >= LifeTimerDuration) return false;
+
+	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+
+	if (TimerManager.IsTimerActive(LifeTimerHandle))
+	{
+		RemainingLifeTime += TimerManager.GetTimerRemaining(LifeTimerHandle) + Amount;
+		TimerManager.ClearTimer(LifeTimerHandle);
+		TimerManager.SetTimer(LifeTimerHandle,
+		                      this,
+		                      &ULifeTimeComponent::DamageOwner,
+		                      RemainingLifeTime,
+		                      false);
+		return true;
+	}
+
+	RemainingLifeTime += Amount;
+	return true;
+}
+
+bool ULifeTimeComponent::DecreaseRemainingTime(const float Amount)
+{
+	if (Amount <= 0.f || RemainingLifeTime <= 0.f) return false;
+
+	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+
+	if (TimerManager.IsTimerActive(LifeTimerHandle))
+	{
+		RemainingLifeTime -= TimerManager.GetTimerRemaining(LifeTimerHandle) + Amount;
+		TimerManager.ClearTimer(LifeTimerHandle);
+
+		if (RemainingLifeTime <= 0.f)
+		{
+			DamageOwner();
+			return true;
+		}
+
+		TimerManager.SetTimer(LifeTimerHandle,
+		                      this,
+		                      &ULifeTimeComponent::DamageOwner,
+		                      RemainingLifeTime,
+		                      false);
+		return true;
+	}
+
+	RemainingLifeTime -= Amount;
+
+	if (RemainingLifeTime <= 0.f)
+	{
+		DamageOwner();
+		return true;
+	}
+	
+	return true;
+}
+
 void ULifeTimeComponent::BeginPlay()
 {
 	Super::BeginPlay();

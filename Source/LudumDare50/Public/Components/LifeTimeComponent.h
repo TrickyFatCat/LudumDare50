@@ -20,6 +20,15 @@ public:
 	UFUNCTION(BlueprintGetter, Category="LifeTime")
 	float GetLifeTimeDuration() const { return LifeTimerDuration; }
 
+	UFUNCTION(BlueprintCallable, Category="LifeTime")
+	float GetNormalizedTime() const;
+
+	UFUNCTION(BlueprintCallable, Category="LifeTime")
+	bool IncreaseRemainingTime(const float Amount);
+
+	UFUNCTION(BlueprintCallable, Category="LifeTime")
+	bool DecreaseRemainingTime(const float Amount);
+
 protected:
 	virtual void BeginPlay() override;
 
