@@ -1,7 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright (c) 2022. Made by Title Goose Team during LudumDare 50. All rights reserved. 
 
 
-#include "BaseCharacter.h"
+#include "Characters/BaseCharacter.h"
 #include "Components/DamageControllerComponent.h"
 
 
