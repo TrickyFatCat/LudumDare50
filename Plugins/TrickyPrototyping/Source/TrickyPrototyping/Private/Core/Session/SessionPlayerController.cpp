@@ -3,9 +3,9 @@
 
 #include "Core/Session/SessionPlayerController.h"
 
+#include "Blueprint/UserWidget.h"
 #include "Core/Session/SessionGameMode.h"
 #include "Kismet/GameplayStatics.h"
-#include "UserInterface/BaseUserWidget.h"
 
 ASessionPlayerController::ASessionPlayerController()
 {
@@ -17,7 +17,7 @@ void ASessionPlayerController::BeginPlay()
 
 	if (CrosshairWidgetClass)
 	{
-		CrosshairWidget = CreateWidget<UBaseUserWidget>(GetWorld(), CrosshairWidgetClass);
+		CrosshairWidget = CreateWidget<UUserWidget>(GetWorld(), CrosshairWidgetClass);
 		SetMouseCursorWidget(EMouseCursor::Crosshairs, CrosshairWidget);
 	}
 

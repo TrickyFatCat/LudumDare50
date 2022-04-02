@@ -7,7 +7,7 @@
 #include "Core/TrickyCoreTypes.h"
 #include "SessionPlayerController.generated.h"
 
-class UBaseUserWidget;
+class UUserWidget;
 
 /**
  * A simple player controller which works with session states.
@@ -31,10 +31,10 @@ protected:
 	virtual void SetupInputComponent() override;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Cursor")
-	TSubclassOf<UBaseUserWidget> CrosshairWidgetClass = nullptr;
+	TSubclassOf<UUserWidget> CrosshairWidgetClass = nullptr;
 
 	UPROPERTY(BlueprintReadOnly, Category="Cursor")
-	UBaseUserWidget* CrosshairWidget = nullptr;
+	UUserWidget* CrosshairWidget = nullptr;
 	
 	/**
 	 * If true, the mouse cursor will be shown when the session switch to the Progress state.
