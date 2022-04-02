@@ -16,6 +16,12 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
+	DamageController->OnDeath.AddDynamic(this, &ABaseCharacter::PlayDeathMontage);
+}
+
+void ABaseCharacter::PlayDeathMontage(AController* DeathInstigator, AActor* DeathCauser, const UDamageType* DamageType)
+{
+	PlayAnimMontage(DeathMontage);
 }
 
 void ABaseCharacter::Tick(float DeltaTime)
@@ -26,6 +32,4 @@ void ABaseCharacter::Tick(float DeltaTime)
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
 }
-
