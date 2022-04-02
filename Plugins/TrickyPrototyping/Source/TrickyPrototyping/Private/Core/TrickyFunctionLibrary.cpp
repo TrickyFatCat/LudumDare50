@@ -4,10 +4,12 @@
 #include "Core/TrickyFunctionLibrary.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Core/TrickyUtils.h"
+#include "Core/Session/SessionGameMode.h"
 #include "Curves/CurveBase.h"
 #include "Curves/CurveFloat.h"
 #include "Curves/CurveVector.h"
 #include "Curves/CurveLinearColor.h"
+#include "Kismet/GameplayStatics.h"
 
 FString UTrickyFunctionLibrary::ConvertTimeSeconds(const float TimeSeconds, const ETimeFormat TimeFormat)
 {
@@ -27,35 +29,35 @@ FString UTrickyFunctionLibrary::ConvertTimeSeconds(const float TimeSeconds, cons
 
 	switch (TimeFormat)
 	{
-		case ETimeFormat::MM_SS_MsMs:
-			Result = FString::Printf(TEXT("%02d:%02d.%02d"),
-			                         TotalMinutes,
-			                         Seconds,
-			                         ConvertMilliseconds(0.1f));
-			break;
+	case ETimeFormat::MM_SS_MsMs:
+		Result = FString::Printf(TEXT("%02d:%02d.%02d"),
+		                         TotalMinutes,
+		                         Seconds,
+		                         ConvertMilliseconds(0.1f));
+		break;
 
-		case ETimeFormat::MM_SS_Ms:
-			Result = FString::Printf(TEXT("%02d:%02d.%d"),
-			                         TotalMinutes,
-			                         Seconds,
-			                         ConvertMilliseconds(0.01f));
-			break;
+	case ETimeFormat::MM_SS_Ms:
+		Result = FString::Printf(TEXT("%02d:%02d.%d"),
+		                         TotalMinutes,
+		                         Seconds,
+		                         ConvertMilliseconds(0.01f));
+		break;
 
-		case ETimeFormat::MM_SS:
-			Result = FString::Printf(TEXT("%02d:%02d"), TotalMinutes, Seconds);
-			break;
+	case ETimeFormat::MM_SS:
+		Result = FString::Printf(TEXT("%02d:%02d"), TotalMinutes, Seconds);
+		break;
 
-		case ETimeFormat::SS_MsMs:
-			Result = FString::Printf(TEXT("%02d.%02d"), TotalSeconds, ConvertMilliseconds(0.1f));
-			break;
+	case ETimeFormat::SS_MsMs:
+		Result = FString::Printf(TEXT("%02d.%02d"), TotalSeconds, ConvertMilliseconds(0.1f));
+		break;
 
-		case ETimeFormat::SS_Ms:
-			Result = FString::Printf(TEXT("%02d.%d"), TotalSeconds, ConvertMilliseconds(0.01f));
-			break;
+	case ETimeFormat::SS_Ms:
+		Result = FString::Printf(TEXT("%02d.%d"), TotalSeconds, ConvertMilliseconds(0.01f));
+		break;
 
-		case ETimeFormat::SS:
-			Result = FString::Printf(TEXT("%02d"), TotalSeconds);
-			break;
+	case ETimeFormat::SS:
+		Result = FString::Printf(TEXT("%02d"), TotalSeconds);
+		break;
 	}
 
 	return Result;
@@ -86,4 +88,13 @@ void UTrickyFunctionLibrary::CalculateTimelinePlayRate(UTimelineComponent* Timel
 	}
 
 	TimelineComponent->SetPlayRate(MaxTime / TargetTime);
+}
+
+void UTrickyFunctionLibrary::GameOver(const UObject* WorldContextObject)
+{
+	ASessionGameMode* SessionGameMode = Cast<ASessionGameMode>(UGameplayStatics::GetGameMode(WorldContextObject));
+
+	if (!SessionGameMode) return;
+
+	SessionGameMode->LoseGame();
 }
