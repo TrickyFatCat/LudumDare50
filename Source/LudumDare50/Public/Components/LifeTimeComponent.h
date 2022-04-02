@@ -1,0 +1,54 @@
+// "Copyright (c) 2022. Made by Title Goose Team during LudumDare 50. All rights reserved. "
+
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Components/ActorComponent.h"
+#include "LifeTimeComponent.generated.h"
+
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+class LUDUMDARE50_API ULifeTimeComponent : public UActorComponent
+{
+	GENERATED_BODY()
+
+public:
+	ULifeTimeComponent();
+
+	UFUNCTION(BlueprintSetter, Category="LifeTime")
+	void SetLifeTimeDuration(const float Value);
+
+	UFUNCTION(BlueprintGetter, Category="LifeTime")
+	float GetLifeTimeDuration() const { return LifeTimerDuration; }
+
+protected:
+	virtual void BeginPlay() override;
+
+	UPROPERTY(BlueprintReadOnly, Category="LifeTime")
+	FTimerHandle LifeTimerHandle;
+
+	UPROPERTY(BlueprintReadOnly, Category="LifeTime")
+	FTimerHandle RestoreTimerHandle;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="LifeTime")
+	float LifeTimerDuration = 20.f;
+
+	UPROPERTY(BlueprintReadOnly, Category="LifeTime")
+	float ElapsedDuration = 0;
+
+public:
+	virtual void TickComponent(float DeltaTime,
+	                           ELevelTick TickType,
+	                           FActorComponentTickFunction* ThisTickFunction) override;
+
+	UFUNCTION(BlueprintCallable, Category="LifeTime")
+	void StartLifeTimer();
+
+	UFUNCTION(BlueprintCallable, Category="LifeTime")
+	void StopLifeTimer();
+
+	UFUNCTION()
+	void DamageOwner();
+
+	UFUNCTION()
+	void RestoreTime();
+};
