@@ -8,6 +8,9 @@
 #include "GameFramework/Actor.h"
 #include "SpawnMonsterManager.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRoundStarted);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRoundFinished);
+
 USTRUCT(BlueprintType)
 struct FEnemyData : public FTableRowBase
 {
@@ -66,6 +69,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateWaveRoundTime(const float Second) { RoundTimeDelay = Second; }
+
+	UPROPERTY(BlueprintAssignable)
+	FOnRoundStarted OnRoundStarted;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnRoundFinished OnRoundFinished;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wave")

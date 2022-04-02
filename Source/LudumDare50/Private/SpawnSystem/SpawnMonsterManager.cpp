@@ -42,6 +42,7 @@ void ASpawnMonsterManager::CallSpawn()
 	{
 		GetWorldTimerManager().ClearTimer(WaveTimerHandle);
 		GetWorldTimerManager().SetTimer(RoundTimerHandle, this, &ASpawnMonsterManager::CallRound, RoundTimeDelay, false);
+		OnRoundFinished.Broadcast();
 	}
 }
 
@@ -50,6 +51,7 @@ void ASpawnMonsterManager::CallRound()
 	UE_LOG(LogSpawnMonsterManager, Display, TEXT("Count Round!"));
 	WaveData = GenerateEnemies();
 	GetWorldTimerManager().SetTimer(WaveTimerHandle, this, &ASpawnMonsterManager::CallSpawn, WaveDelayTime, true);
+	OnRoundStarted.Broadcast();
 }
 
 FWaveData ASpawnMonsterManager::GenerateEnemies()
