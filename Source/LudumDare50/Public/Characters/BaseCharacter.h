@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Copyright (c) 2022. Made by Title Goose Team during LudumDare 50. All rights reserved. 
 
 #pragma once
 
@@ -19,7 +19,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Components")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	UDamageControllerComponent* DamageController = nullptr;
 
 public:
