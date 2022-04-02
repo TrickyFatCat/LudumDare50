@@ -149,7 +149,8 @@ protected:
 	 * Also good when distance between points is uniform.
 	 */
 	UPROPERTY(EditAnywhere,
-		BlueprintReadOnly,
+		BlueprintGetter=GetTravelTime,
+		BlueprintSetter=SetTravelTime,
 		Category="FloatingActor",
 		meta=(AllowPrivateAccess="true", ClampMin="0", EditCondition="bUseTravelTime"))
 	float TravelTime = 1.f;

@@ -145,7 +145,7 @@ void AFloatingActorBase::SetSpeed(const float Value)
 
 void AFloatingActorBase::SetTravelTime(const float Value)
 {
-	if (bUseTravelTime || Value <= 0.f) return;
+	if (!bUseTravelTime || Value <= 0.f) return;
 
 	TravelTime = Value;
 	UTrickyFunctionLibrary::CalculateTimelinePlayRate(MovementTimeline, Cast<UCurveBase>(MovementAnimationCurve), TravelTime);
