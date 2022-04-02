@@ -28,7 +28,29 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	UCameraComponent* CameraComponent = nullptr;
-
+	
 public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+	
+protected:
+	UFUNCTION(BlueprintNativeEvent, Category="Abilities")
+	void ActivateAbility1();
+
+	UFUNCTION(BlueprintNativeEvent, Category="Abilities")
+	void ActivateAbility2();
+	
+	UFUNCTION(BlueprintNativeEvent, Category="Abilities")
+	void ActivateAbility3();
+	
+	UFUNCTION(BlueprintNativeEvent, Category="Abilities")
+	void ActivateAbility4();
+	
+private:
+	UFUNCTION()
+	void MoveForward(const float AxisValue);
+
+	UFUNCTION()
+	void MoveRight(const float AxisValue);
+
+	void GetMovementRotation(FRotator& Rotator) const;
 };
