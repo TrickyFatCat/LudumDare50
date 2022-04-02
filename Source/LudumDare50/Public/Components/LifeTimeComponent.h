@@ -24,6 +24,9 @@ public:
 	float GetNormalizedTime() const;
 
 	UFUNCTION(BlueprintCallable, Category="LifeTime")
+	float GetRemainingTime() const;
+
+	UFUNCTION(BlueprintCallable, Category="LifeTime")
 	bool IncreaseRemainingTime(const float Amount);
 
 	UFUNCTION(BlueprintCallable, Category="LifeTime")
@@ -49,6 +52,8 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly, Category="LifeTime")
 	float RemainingLifeTime = LifeTimerDuration;
+
+	bool bIsInevitable = false;
 
 public:
 	virtual void TickComponent(float DeltaTime,

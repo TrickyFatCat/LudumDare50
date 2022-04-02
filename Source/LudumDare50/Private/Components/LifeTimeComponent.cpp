@@ -26,7 +26,16 @@ float ULifeTimeComponent::GetNormalizedTime() const
 	const float RemainingTime = TimerManager.IsTimerActive(LifeTimerHandle)
 		                            ? TimerManager.GetTimerRemaining(LifeTimerHandle)
 		                            : RemainingLifeTime;
-	return RemainingTime / LifeTimerDuration;
+	return bIsInevitable ? 0.f : RemainingTime / LifeTimerDuration;
+}
+
+float ULifeTimeComponent::GetRemainingTime() const
+{
+	const FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+	const float RemainingTime = TimerManager.IsTimerActive(LifeTimerHandle)
+		                            ? TimerManager.GetTimerRemaining(LifeTimerHandle)
+		                            : RemainingLifeTime;
+	return bIsInevitable ? 0.f : RemainingTime;
 }
 
 bool ULifeTimeComponent::IncreaseRemainingTime(const float Amount)
@@ -83,7 +92,7 @@ bool ULifeTimeComponent::DecreaseRemainingTime(const float Amount)
 		DamageOwner();
 		return true;
 	}
-	
+
 	return true;
 }
 
@@ -141,6 +150,7 @@ void ULifeTimeComponent::DamageOwner()
 	if (!DamageControllerComponent) return;
 
 	UGameplayStatics::ApplyDamage(GetOwner(), DamageControllerComponent->GetHealth(), nullptr, nullptr, nullptr);
+	bIsInevitable = true;
 }
 
 void ULifeTimeComponent::RestoreTime()
