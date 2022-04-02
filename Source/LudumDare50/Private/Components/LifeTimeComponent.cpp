@@ -40,13 +40,14 @@ float ULifeTimeComponent::GetRemainingTime() const
 
 bool ULifeTimeComponent::IncreaseRemainingTime(const float Amount)
 {
-	if (Amount <= 0.f || RemainingLifeTime <= 0.f || RemainingLifeTime >= LifeTimerDuration) return false;
+	if (Amount <= 0.f || RemainingLifeTime <= 0.f || GetNormalizedTime() >= 1.f) return false;
 
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 
 	if (TimerManager.IsTimerActive(LifeTimerHandle))
 	{
 		RemainingLifeTime += TimerManager.GetTimerRemaining(LifeTimerHandle) + Amount;
+		RemainingLifeTime = FMath::Min(RemainingLifeTime, LifeTimerDuration);
 		TimerManager.ClearTimer(LifeTimerHandle);
 		TimerManager.SetTimer(LifeTimerHandle,
 		                      this,
@@ -57,6 +58,7 @@ bool ULifeTimeComponent::IncreaseRemainingTime(const float Amount)
 	}
 
 	RemainingLifeTime += Amount;
+	RemainingLifeTime = FMath::Min(RemainingLifeTime, LifeTimerDuration);
 	return true;
 }
 
