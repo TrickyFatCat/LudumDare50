@@ -7,6 +7,8 @@
 #include "Core/TrickyCoreTypes.h"
 #include "SessionPlayerController.generated.h"
 
+class UUserWidget;
+
 /**
  * A simple player controller which works with session states.
  * It already has a pause functionality. Just add the "Pause" input action in the project settings.
@@ -28,6 +30,12 @@ public:
 protected:
 	virtual void SetupInputComponent() override;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Cursor")
+	TSubclassOf<UUserWidget> CrosshairWidgetClass = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, Category="Cursor")
+	UUserWidget* CrosshairWidget = nullptr;
+	
 	/**
 	 * If true, the mouse cursor will be shown when the session switch to the Progress state.
 	 */
