@@ -9,7 +9,7 @@
 #include "SpawnMonsterManager.generated.h"
 
 USTRUCT(BlueprintType)
-struct FWaveData : public FTableRowBase
+struct FEnemyData : public FTableRowBase
 {
 	GENERATED_USTRUCT_BODY()
 
@@ -20,7 +20,28 @@ struct FWaveData : public FTableRowBase
 	int Weight;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy", meta = (ClampMin = "1", UIMin = "1"))
-	int MaxCount;
+	int Count;
+};
+
+USTRUCT(BlueprintType)
+struct FWaveData
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadOnly)
+	TArray<TSubclassOf<AEnemyCharacter>> Enemies;
+
+	UPROPERTY(BlueprintReadOnly)
+	int MaxEnemies;
+
+	UPROPERTY(BlueprintReadOnly)
+	int Spawned;
+	
+	UPROPERTY(BlueprintReadOnly)
+	float DelayTime;
+
+	UPROPERTY(BlueprintReadOnly)
+	int MaxAtTime;
 };
 
 class ASpawnMonsterActor;
@@ -34,25 +55,44 @@ class LUDUMDARE50_API ASpawnMonsterManager : public AActor
 public:	
 	ASpawnMonsterManager();
 
-protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Manager")
-	TArray<UDataTable*> Waves;
+	UFUNCTION(BlueprintCallable)
+	void UpdateWave(UDataTable* Data) { Wave = Data; }
 	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Manager")
-	float DelayTime = 20.0f;
+	UFUNCTION(BlueprintCallable)
+	void UpdateWaveDelay(const float Second) { WaveDelayTime = Second; }
+	
+	UFUNCTION(BlueprintCallable)
+	void UpdateWaveMaxAtTime(const float MonsterCount) { WaveMaxAtTime = MonsterCount; }
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Manager")
-	int MaxMonsterOnLevel = 30;
+	UFUNCTION(BlueprintCallable)
+	void UpdateWaveRoundTime(const float Second) { RoundTimeDelay = Second; }
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Manager")
-	TSubclassOf<AEnemyCharacter> TestEnemyClass;
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wave")
+	UDataTable* Wave;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wave")
+	float WaveDelayTime = 2.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wave")
+	int WaveMaxAtTime = 2;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wave")
+	float RoundTimeDelay = 20.0f;
 
 	void CallSpawn();
+
+	void CallRound();
+
+	FWaveData GenerateEnemies();
 
 	virtual void BeginPlay() override;
 
 private:
 	TArray<ASpawnMonsterActor*> SpawnActors;
 
-	FTimerHandle TimerHandle;
+	FTimerHandle RoundTimerHandle;
+	FTimerHandle WaveTimerHandle;
+
+	FWaveData WaveData;
 };
