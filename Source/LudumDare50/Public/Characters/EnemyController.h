@@ -13,7 +13,7 @@ class LUDUMDARE50_API AEnemyController : public AAIController
 	GENERATED_BODY()
 
 public:
-	AEnemyController();
+	AEnemyController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	UEnemyPerceptionComponent* EnemyPerceptionComponent;

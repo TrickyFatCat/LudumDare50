@@ -26,18 +26,28 @@ float ULifeTimeComponent::GetNormalizedTime() const
 	const float RemainingTime = TimerManager.IsTimerActive(LifeTimerHandle)
 		                            ? TimerManager.GetTimerRemaining(LifeTimerHandle)
 		                            : RemainingLifeTime;
-	return RemainingTime / LifeTimerDuration;
+	return bIsInevitable ? 0.f : RemainingTime / LifeTimerDuration;
+}
+
+float ULifeTimeComponent::GetRemainingTime() const
+{
+	const FTimerManager& TimerManager = GetWorld()->GetTimerManager();
+	const float RemainingTime = TimerManager.IsTimerActive(LifeTimerHandle)
+		                            ? TimerManager.GetTimerRemaining(LifeTimerHandle)
+		                            : RemainingLifeTime;
+	return bIsInevitable ? 0.f : RemainingTime;
 }
 
 bool ULifeTimeComponent::IncreaseRemainingTime(const float Amount)
 {
-	if (Amount <= 0.f || RemainingLifeTime <= 0.f || RemainingLifeTime >= LifeTimerDuration) return false;
+	if (Amount <= 0.f || RemainingLifeTime <= 0.f || GetNormalizedTime() >= 1.f) return false;
 
 	FTimerManager& TimerManager = GetWorld()->GetTimerManager();
 
 	if (TimerManager.IsTimerActive(LifeTimerHandle))
 	{
 		RemainingLifeTime += TimerManager.GetTimerRemaining(LifeTimerHandle) + Amount;
+		RemainingLifeTime = FMath::Min(RemainingLifeTime, LifeTimerDuration);
 		TimerManager.ClearTimer(LifeTimerHandle);
 		TimerManager.SetTimer(LifeTimerHandle,
 		                      this,
@@ -48,6 +58,7 @@ bool ULifeTimeComponent::IncreaseRemainingTime(const float Amount)
 	}
 
 	RemainingLifeTime += Amount;
+	RemainingLifeTime = FMath::Min(RemainingLifeTime, LifeTimerDuration);
 	return true;
 }
 
@@ -83,7 +94,7 @@ bool ULifeTimeComponent::DecreaseRemainingTime(const float Amount)
 		DamageOwner();
 		return true;
 	}
-	
+
 	return true;
 }
 
@@ -141,6 +152,7 @@ void ULifeTimeComponent::DamageOwner()
 	if (!DamageControllerComponent) return;
 
 	UGameplayStatics::ApplyDamage(GetOwner(), DamageControllerComponent->GetHealth(), nullptr, nullptr, nullptr);
+	bIsInevitable = true;
 }
 
 void ULifeTimeComponent::RestoreTime()
