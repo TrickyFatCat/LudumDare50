@@ -16,7 +16,6 @@ void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetMesh()->SetVisibility(false, false);
 }
 
 void ABaseCharacter::Tick(float DeltaTime)
