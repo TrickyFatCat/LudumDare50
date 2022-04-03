@@ -43,9 +43,6 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
-	UPROPERTY(BlueprintReadWrite)
-	bool bCanCast = true;
-
 	UFUNCTION()
 	void ActivateAbility1();
 
