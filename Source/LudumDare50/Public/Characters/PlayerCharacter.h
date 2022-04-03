@@ -43,6 +43,9 @@ public:
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	bool bIsStunned = false;
+	
 	UFUNCTION()
 	void ActivateAbility1();
 
@@ -80,4 +83,13 @@ private:
 	                         FVector PlaneOrigin,
 	                         FVector PlaneNormal,
 	                         FVector& Intersection);
+
+	UFUNCTION(BlueprintCallable)
+	void ApplyStun(const float StunTime);
+
+	UFUNCTION()
+	void ExitStun();
+
+	UFUNCTION()
+	void ToggleInput(const bool bIsEnabled);
 };
