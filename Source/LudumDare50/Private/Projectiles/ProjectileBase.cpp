@@ -29,7 +29,6 @@ AProjectileBase::AProjectileBase()
 
 void AProjectileBase::BeginPlay()
 {
-	Super::BeginPlay();
 	ProjectileMovement->Velocity = ShotDirection * ProjectileMovement->InitialSpeed;
 	ProjectileCollision->IgnoreActorWhenMoving(GetOwner(), true);
 	ProjectileCollision->OnComponentHit.AddDynamic(this, &AProjectileBase::OnProjectileHit);
@@ -44,6 +43,7 @@ void AProjectileBase::BeginPlay()
 	{
 		ProjectileMovement->bShouldBounce = ProjectileData.bIsBouncing;
 	}
+	Super::BeginPlay();
 }
 
 void AProjectileBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
