@@ -13,7 +13,8 @@ enum class EWaveState: uint8
 {
 	Ready = 0,
 	InSpawn,
-	Frozen
+	Frozen,
+	Block
 };
 
 UCLASS()
@@ -26,6 +27,12 @@ public:
 
 	bool Spawn(UClass* Monster);
 
+	UFUNCTION(BlueprintCallable)
+	void Lock() { State = EWaveState::Block; };
+
+	UFUNCTION(BlueprintCallable)
+	void Unlock() { State = EWaveState::Ready; };
+
 	int GetWaveGroup() const { return WaveId; };
 
 protected:
@@ -36,8 +43,8 @@ protected:
 	int WaveId = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wave")
-	float FreezingTime = 10.0f;
-
+	float FreezingTime = 1.0f;
+	
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
@@ -66,5 +73,5 @@ private:
     
 	bool bIsBlocked = false;
 	
-	void RemoveFreeze() { State = EWaveState::Ready; };
+	void RemoveFreeze() { if (State != EWaveState::Block) State = EWaveState::Ready; };
 };
