@@ -45,6 +45,7 @@ void ASpawnMonsterManager::CallSpawn()
 	UE_LOG(LogSpawnMonsterManager, Display, TEXT("Count Spawn!"));
 	for (int i = 0; i < WaveData.MaxAtTime; i++)
 	{
+		if (WaveData.MaxEnemies == WaveData.Spawned) break;
 		SortedSpawnActors();
 		for (ASpawnMonsterActor* SpawnActor : SpawnActors)
 		{
