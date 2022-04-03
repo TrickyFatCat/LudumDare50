@@ -26,7 +26,7 @@ void APickupBase::BeginPlay()
 	InteractionTrigger->SetIsNormalTrigger(!bRequireInteraction);
 	InteractionTrigger->bRequireLineOfSight = bRequireLineOfSight;
 	InteractionTrigger->OnComponentBeginOverlap.AddDynamic(this, &APickupBase::OnTriggerBeginOverlap);
-	
+
 	Super::BeginPlay();
 }
 
@@ -34,16 +34,13 @@ void APickupBase::Tick(float DeltaTime)
 {
 	AnimatePosition();
 	AnimateRotation();
-	
+
 	Super::Tick(DeltaTime);
 }
 
 void APickupBase::ActivatePickup_Implementation()
 {
-	if (!GetRootComponent()->bHiddenInGame) return;
-
-	GetRootComponent()->SetHiddenInGame(false, true);
-	PrimaryActorTick.bCanEverTick = true;
+	MeshScene->SetHiddenInGame(false, true);
 	InteractionTrigger->SetIsEnabled(true);
 }
 
@@ -61,9 +58,10 @@ void APickupBase::DestroyPickup()
 
 void APickupBase::DeactivatePickup_Implementation()
 {
-	GetRootComponent()->SetHiddenInGame(true, true);
-	PrimaryActorTick.bCanEverTick = false;
+	MeshScene->SetHiddenInGame(true, true);
 	InteractionTrigger->SetIsEnabled(false);
+	OnPickupDeactivated.Broadcast();
+	OnPickupDeactivation();
 }
 
 bool APickupBase::ProcessInteraction_Implementation(AActor* TargetActor)
@@ -90,7 +88,7 @@ void APickupBase::OnTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent
 
 	if (ActivatePickupEffect(OtherActor))
 	{
-		DestroyPickup();
+		bDestroyOnEffectActivation ? DestroyPickup() : DeactivatePickup();
 	}
 }
 
