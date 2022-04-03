@@ -32,7 +32,7 @@ void APlayerCharacter::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	if (DamageController->GetIsDead()) return;
+	if (DamageController->GetIsDead() || bIsStunned) return;
 	
 	RotateTowardsCursor();
 }
@@ -51,21 +51,21 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 void APlayerCharacter::ActivateAbility1()
 {
-	if (!bCanCast) return;
+	if (!bCanCast || bIsStunned) return;
 
 	OnAbility1();
 }
 
 void APlayerCharacter::ActivateAbility2()
 {
-	if (!bCanCast) return;
+	if (!bCanCast || bIsStunned) return;
 
 	OnAbility2();
 }
 
 void APlayerCharacter::ActivateAbility3()
 {
-	if (!bCanCast) return;
+	if (!bCanCast || bIsStunned) return;
 
 	OnAbility3();
 }
@@ -138,4 +138,30 @@ bool APlayerCharacter::CalculateProjection(FVector RayOrigin,
 	Intersection = FVector(RayOrigin + (Vec1 * (Dot1 / Dot2)));
 
 	return Dot2 != 0.f;
+}
+
+void APlayerCharacter::ApplyStun(const float StunTime)
+{
+	if (bIsStunned || StunTime <= 0.f) return;
+
+	ToggleInput(false);
+	FTimerHandle StunTimerHandle;
+	GetWorldTimerManager().SetTimer(StunTimerHandle, this, &APlayerCharacter::ExitStun, StunTime, false);
+	bIsStunned = true;
+}
+
+void APlayerCharacter::ExitStun()
+{
+	if (DamageController->GetIsDead()) return;
+	ToggleInput(true);
+	bIsStunned = false;
+}
+
+void APlayerCharacter::ToggleInput(const bool bIsEnabled)
+{
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+
+	if (!PlayerController) return;
+
+	bIsEnabled ? EnableInput(PlayerController) : DisableInput(PlayerController);
 }
