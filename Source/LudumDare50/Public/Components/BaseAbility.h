@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "BaseAbility.generated.h"
 
+class UAnimMontage;
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityActivatedSignature);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityDeactivatedSignature);
@@ -24,21 +26,20 @@ public:
 	UPROPERTY(BlueprintAssignable, Category="Ability")
 	FOnAbilityDeactivatedSignature OnAbilityDeactivated;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Ability")
+	UFUNCTION(BlueprintCallable, Category="Ability")
 	bool ActivateAbility();
 	
-	virtual bool ActivateAbility_Implementation();
-	
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Ability")
+	UFUNCTION(BlueprintCallable, Category="Ability")
 	bool DeactivateAbility();
-
-	virtual bool DeactivateAbility_Implementation();
 
 protected:
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(BlueprintReadOnly, Category="Ability");
 	bool bIsActivated = false;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
+	UAnimMontage* AbilityMontage = nullptr;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Ability")
 	float CooldownDuration = 0.f;
@@ -48,6 +49,12 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	FTimerHandle CooldownTimerHandle;
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Ability")
+	void ActivateEffect();
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent, Category="Ability")
+	void DeactivateEffect();
 
 public:
 	virtual void TickComponent(float DeltaTime,
