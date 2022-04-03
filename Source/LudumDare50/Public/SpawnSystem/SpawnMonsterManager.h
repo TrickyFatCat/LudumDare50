@@ -57,6 +57,7 @@ class LUDUMDARE50_API ASpawnMonsterManager : public AActor
 
 public:	
 	ASpawnMonsterManager();
+	void SortedSpawnActors();
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateWave(UDataTable* Data) { Wave = Data; }
@@ -70,6 +71,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateWaveRoundTime(const float Second) { RoundTimeDelay = Second; }
 
+	UFUNCTION(BlueprintCallable)
+	void UpdateRandomSpawn(const bool Random) { RoundTimeDelay = Random; }
+	
 	UPROPERTY(BlueprintAssignable)
 	FOnRoundStarted OnRoundStarted;
 
@@ -88,6 +92,10 @@ protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wave")
 	float RoundTimeDelay = 20.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wave")
+	bool bIsRandomSpawn = true;
+
 
 	void CallSpawn();
 

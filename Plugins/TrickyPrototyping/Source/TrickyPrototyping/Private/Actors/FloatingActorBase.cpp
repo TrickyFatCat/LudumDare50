@@ -197,7 +197,7 @@ void AFloatingActorBase::ContinueMovement()
 {
 	if (State == EFloatingActorState::Idle) return;
 
-	OnPointReached.Broadcast(CurrentPointIndex);
+	OnPointReached.Broadcast(NextPointIndex);
 
 	if (MovementMode == EFloatingActorMovementMode::Manual)
 	{

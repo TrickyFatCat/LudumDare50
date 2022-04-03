@@ -2,6 +2,8 @@
 
 
 #include "Characters/BaseCharacter.h"
+
+#include "Components/CapsuleComponent.h"
 #include "Components/DamageControllerComponent.h"
 
 
@@ -21,6 +23,8 @@ void ABaseCharacter::BeginPlay()
 
 void ABaseCharacter::PlayDeathMontage(AController* DeathInstigator, AActor* DeathCauser, const UDamageType* DamageType)
 {
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	PlayAnimMontage(DeathMontage);
 }
 
