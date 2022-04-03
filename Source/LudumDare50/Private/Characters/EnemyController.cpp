@@ -5,9 +5,11 @@
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Characters/EnemyCharacter.h"
+#include "Navigation/CrowdFollowingComponent.h"
 
 
-AEnemyController::AEnemyController()
+AEnemyController::AEnemyController(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UCrowdFollowingComponent>(TEXT("PathFollowingComponent")))
 {
 	EnemyPerceptionComponent = CreateDefaultSubobject<UEnemyPerceptionComponent>("PerceptionComponent");
 	SetPerceptionComponent(*EnemyPerceptionComponent);

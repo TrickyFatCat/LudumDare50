@@ -35,6 +35,8 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWaitStartedSingnature, int32, Poi
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWaitFinishedSingnature, int32, PointIndex);
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnMovementStartedSignature);
+
 UCLASS(NotBlueprintable, NotBlueprintType)
 class TRICKYPROTOTYPING_API AFloatingActorBase : public AActor
 {
@@ -64,6 +66,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category="FloatingActor")
 	FOnWaitFinishedSingnature OnWaitFinished;
+	
+	UPROPERTY(BlueprintAssignable, Category="FloatingActor")
+	FOnMovementStartedSignature OnMovementStarted;
 
 	/**
 	 * Starts platform movement.
@@ -144,7 +149,8 @@ protected:
 	 * Also good when distance between points is uniform.
 	 */
 	UPROPERTY(EditAnywhere,
-		BlueprintReadOnly,
+		BlueprintGetter=GetTravelTime,
+		BlueprintSetter=SetTravelTime,
 		Category="FloatingActor",
 		meta=(AllowPrivateAccess="true", ClampMin="0", EditCondition="bUseTravelTime"))
 	float TravelTime = 1.f;
@@ -278,6 +284,8 @@ protected:
 	void ContinueMovement();
 
 	virtual void CalculateNextPointIndex();
+
+	virtual void ProcessMovementStart();
 
 	void StartStopWaitTimer();
 

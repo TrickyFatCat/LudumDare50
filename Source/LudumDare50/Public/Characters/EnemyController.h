@@ -13,13 +13,13 @@ class LUDUMDARE50_API AEnemyController : public AAIController
 	GENERATED_BODY()
 
 public:
-	AEnemyController();
+	AEnemyController(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get());
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Components")
 	UEnemyPerceptionComponent* EnemyPerceptionComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI")
-	FName FocusOnKeyName = "EnemyActor";
+	FName FocusOnKeyName = "PlayerActor";
     
 	virtual void OnPossess(APawn* InPawn) override;
 	virtual  void Tick(float DeltaTime) override;
