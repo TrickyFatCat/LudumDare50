@@ -39,21 +39,30 @@ protected:
 
 public:
 	virtual void Tick(float DeltaSeconds) override;
-	
+
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 protected:
-	UFUNCTION(BlueprintNativeEvent, Category="Abilities")
+	UPROPERTY(BlueprintReadWrite)
+	bool bCanCast = true;
+
+	UFUNCTION()
 	void ActivateAbility1();
 
-	UFUNCTION(BlueprintNativeEvent, Category="Abilities")
+	UFUNCTION()
 	void ActivateAbility2();
 
-	UFUNCTION(BlueprintNativeEvent, Category="Abilities")
+	UFUNCTION()
 	void ActivateAbility3();
 
-	UFUNCTION(BlueprintNativeEvent, Category="Abilities")
-	void ActivateAbility4();
+	UFUNCTION(BlueprintImplementableEvent, Category="Abilities")
+	void OnAbility1();
+
+	UFUNCTION(BlueprintImplementableEvent, Category="Abilities")
+	void OnAbility2();
+
+	UFUNCTION(BlueprintImplementableEvent, Category="Abilities")
+	void OnAbility3();
 
 private:
 	UFUNCTION()

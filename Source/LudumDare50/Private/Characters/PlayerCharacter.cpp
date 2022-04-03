@@ -47,23 +47,27 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	PlayerInputComponent->BindAction("Ability1", IE_Pressed, this, &APlayerCharacter::ActivateAbility1);
 	PlayerInputComponent->BindAction("Ability2", IE_Pressed, this, &APlayerCharacter::ActivateAbility2);
 	PlayerInputComponent->BindAction("Ability3", IE_Pressed, this, &APlayerCharacter::ActivateAbility3);
-	PlayerInputComponent->BindAction("Ability4", IE_Pressed, this, &APlayerCharacter::ActivateAbility4);
 }
 
-void APlayerCharacter::ActivateAbility1_Implementation()
+void APlayerCharacter::ActivateAbility1()
 {
+	if (!bCanCast) return;
+
+	OnAbility1();
 }
 
-void APlayerCharacter::ActivateAbility2_Implementation()
+void APlayerCharacter::ActivateAbility2()
 {
+	if (!bCanCast) return;
+
+	OnAbility2();
 }
 
-void APlayerCharacter::ActivateAbility3_Implementation()
+void APlayerCharacter::ActivateAbility3()
 {
-}
+	if (!bCanCast) return;
 
-void APlayerCharacter::ActivateAbility4_Implementation()
-{
+	OnAbility3();
 }
 
 void APlayerCharacter::MoveForward(const float AxisValue)
