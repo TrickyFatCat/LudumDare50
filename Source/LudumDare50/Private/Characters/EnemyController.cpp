@@ -5,6 +5,7 @@
 
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Characters/EnemyCharacter.h"
+#include "Components/DamageControllerComponent.h"
 #include "Navigation/CrowdFollowingComponent.h"
 
 
@@ -28,12 +29,13 @@ void AEnemyController::OnPossess(APawn* InPawn)
 void AEnemyController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 	SetFocus(GetFocusOnActor());
 }
 
 AActor* AEnemyController::GetFocusOnActor() const
 {
+	if (GetPawn()->FindComponentByClass<UDamageControllerComponent>()->GetIsDead()) return nullptr;
 	if (GetBlackboardComponent() == nullptr) return nullptr;
 	return Cast<AActor>(GetBlackboardComponent()->GetValueAsObject(FocusOnKeyName));
 }
