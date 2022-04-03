@@ -23,17 +23,23 @@ protected:
 
 public:
 	UFUNCTION(BlueprintSetter, Category="FloatingActor|Points")
-	void SetTargetScale(const FVector NewScale) { TargetScale = NewScale; }
+	void SetTargetScale(const float NewScale) { TargetScale = NewScale; }
 
 	UFUNCTION(BlueprintGetter, Category="FloatingActor|Points")
-	FVector GetTargetScale() const { return TargetScale; }
+	float GetTargetScale() const { return TargetScale; }
 
 protected:
 	UPROPERTY(VisibleAnywhere)
-	FVector InitialScale = FVector::OneVector;
+	float DefaultRadius = 512.f;
+	
+	UPROPERTY(VisibleAnywhere)
+	float InitialRadius = DefaultRadius;
+
+	UPROPERTY(VisibleAnywhere)
+	float TargetRadius = DefaultRadius;
 	
 	UPROPERTY(BlueprintSetter=SetTargetScale, BlueprintGetter=GetTargetScale, Category="FloatingActor|Points")
-	FVector TargetScale = FVector::OneVector;
+	float TargetScale = 1.f;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	UBaseSphereTriggerComponent* TriggerComponent = nullptr;
@@ -55,4 +61,10 @@ protected:
 	                          AActor* OtherActor,
 	                          UPrimitiveComponent* OtherComp,
 	                          int32 OtherBodyIndex);
+
+	UFUNCTION(BlueprintCallable, Category="FloatingActor|LifeArea")
+	void CalculateRadius();
+	
+	UFUNCTION(BlueprintCallable, Category="FloatingActor|LifeArea")
+	void AnimateScale(const float Progress);
 };

@@ -30,8 +30,9 @@ bool ASpawnMonsterActor::Spawn(UClass* Monster)
 	const auto Location = GetActorLocation();
 	const auto Rotation = GetActorRotation();
 	const auto Actor = GetWorld()->SpawnActor(Monster, &Location, &Rotation);
-	Cast<AEnemyCharacter>(Actor)->GetMesh()->SetVisibility(true);
+	if (Actor == nullptr) return false;
 
+	Cast<AEnemyCharacter>(Actor)->GetMesh()->SetVisibility(true);
 	State = EWaveState::Frozen;
 
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASpawnMonsterActor::RemoveFreeze, FreezingTime);
