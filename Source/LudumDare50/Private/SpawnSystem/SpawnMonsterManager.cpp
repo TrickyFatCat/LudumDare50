@@ -82,7 +82,6 @@ FWaveData ASpawnMonsterManager::GenerateEnemies()
 	TArray<FEnemyData*> AllEnemies;
 	Wave->GetAllRows<FEnemyData>("", AllEnemies);
 
-
 	for (const FEnemyData* EnemyStat : AllEnemies)
 	{
 		for (int i = 0; i < EnemyStat->Count; i++)
@@ -115,5 +114,6 @@ void ASpawnMonsterManager::BeginPlay()
 	for (TActorIterator<ASpawnMonsterActor> It(GetWorld()); It; ++It) { SpawnActors.Add(*It); }
 	UE_LOG(LogSpawnMonsterManager, Display, TEXT("Count Spawn: %i."), SpawnActors.Num());
 
-	GetWorldTimerManager().SetTimer(RoundTimerHandle, this, &ASpawnMonsterManager::CallRound, WaveDelayTime, false);
+	if (Wave == nullptr) return;
+	GetWorldTimerManager().SetTimer(RoundTimerHandle, this, &ASpawnMonsterManager::CallRound,WaveDelayTime, false);
 }

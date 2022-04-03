@@ -8,12 +8,12 @@ FName UTrickyGameInstance::GetStartLevelName() const
 {
 	if (LevelNames.Num() == 0) return NAME_None;
 
-	return LevelNames[0];
+	return LevelNames[FMath::RandRange(0, LevelNames.Num() - 1)];
 }
 
 FName UTrickyGameInstance::GetNextLevelName() const
 {
-	FName NextLevelName = NAME_None;
+	FName NextLevelName = GetStartLevelName();
 	const FName CurrentLevelName = FName(UGameplayStatics::GetCurrentLevelName(this));
 
 	if (CurrentLevelName.IsNone() || !LevelNames.Contains(CurrentLevelName))
@@ -22,19 +22,19 @@ FName UTrickyGameInstance::GetNextLevelName() const
 		return NextLevelName;
 	}
 
-	for (int32 i = 0; i < LevelNames.Num(); ++i)
-	{
-		if (LevelNames[i] != CurrentLevelName) continue;
-
-		if (i + 1 >= LevelNames.Num())
-		{
-			NextLevelName = MainMenuLevelName;
-			break;
-		}
-
-		NextLevelName = LevelNames[i + 1];
-		break;
-	}
+	// for (int32 i = 0; i < LevelNames.Num(); ++i)
+	// {
+	// 	if (LevelNames[i] != CurrentLevelName) continue;
+	//
+	// 	if (i + 1 >= LevelNames.Num())
+	// 	{
+	// 		NextLevelName = MainMenuLevelName;
+	// 		break;
+	// 	}
+	//
+	// 	NextLevelName = LevelNames[i + 1];
+	// 	break;
+	// }
 
 	return NextLevelName;
 }
