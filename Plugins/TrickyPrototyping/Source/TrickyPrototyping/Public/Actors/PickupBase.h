@@ -10,6 +10,8 @@
 class UInteractionSphereComponent;
 class USoundCue;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPickupDeactivatedSignature);
+
 /**
  * Base pickup class. Use for creating various pickups
  */
@@ -27,6 +29,9 @@ protected:
 
 public:
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(BlueprintAssignable)
+	FOnPickupDeactivatedSignature OnPickupDeactivated;
 	
 	UFUNCTION(BlueprintGetter, Category="Pickup")
 	bool GetDestroyOnEffectActivation() const { return bDestroyOnEffectActivation; }
@@ -48,6 +53,9 @@ protected:
 
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="Components")
 	USceneComponent* MeshScene = nullptr;
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnPickupDeactivation();
 	
 	UFUNCTION(BlueprintNativeEvent, Category="Pickup")
 	bool ActivatePickupEffect(AActor* TargetActor);
@@ -56,7 +64,7 @@ protected:
 
 	virtual void DestroyPickup();
 
-	UFUNCTION(BlueprintImplementableEvent, Category="Pickup")
+	UFUNCTION(BlueprintNativeEvent, Category="Pickup")
 	void DeactivatePickup();
 
 	virtual void DeactivatePickup_Implementation();
