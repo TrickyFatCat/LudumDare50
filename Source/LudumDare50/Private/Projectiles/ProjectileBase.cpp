@@ -63,6 +63,7 @@ void AProjectileBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AProjectileBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
 }
 
 void AProjectileBase::GetProjectileData(FProjectileData& Data) const
