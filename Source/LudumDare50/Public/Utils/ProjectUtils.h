@@ -14,12 +14,14 @@ UCLASS()
 class LUDUMDARE50_API UProjectUtils : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
-	
+
 public:
 	UFUNCTION(BlueprintCallable, Category="ProjectUtils")
 	static void SpawnProjectile(TSubclassOf<AProjectileBase> ProjectileClass,
 	                            AActor* Owner,
 	                            const FVector& Position,
-	                            const FVector& Direction,
-	                            const float Damage);
+	                            FVector Direction,
+	                            const float Damage,
+	                            const float Spread = 0.f,
+	                            const int32 Amount = 1);
 };
