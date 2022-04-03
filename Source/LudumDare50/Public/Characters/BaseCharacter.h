@@ -19,6 +19,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool bCanCast = true;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	UDamageControllerComponent* DamageController = nullptr;
 

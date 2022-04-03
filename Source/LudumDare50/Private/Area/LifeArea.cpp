@@ -9,27 +9,26 @@ ALifeArea::ALifeArea()
 {
 	TriggerComponent = CreateDefaultSubobject<UBaseSphereTriggerComponent>("TriggerComponent");
 	TriggerComponent->SetupAttachment(GetRootComponent());
+	TriggerComponent->SetSphereRadius(DefaultRadius);
 }
 
 void ALifeArea::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	TriggerComponent->OnComponentBeginOverlap.AddDynamic(this, &ALifeArea::OnBeginOverlap);
 	TriggerComponent->OnComponentEndOverlap.AddDynamic(this, &ALifeArea::OnEndOverlap);
 }
 
 void ALifeArea::MoveActor(const float Progress)
 {
-	SetActorScale3D(FMath::Lerp(InitialScale, TargetScale, Progress));
-
+	AnimateScale(Progress);
 	Super::MoveActor(Progress);
 }
 
 void ALifeArea::ProcessMovementStart()
 {
-	InitialScale = GetActorScale3D();
-
+	CalculateRadius();
 	Super::ProcessMovementStart();
 }
 
@@ -57,4 +56,15 @@ void ALifeArea::OnEndOverlap(UPrimitiveComponent* OverlappedComponent,
 	if (!LifeTimeComponent) return;
 
 	LifeTimeComponent->StartLifeTimer();
+}
+
+void ALifeArea::CalculateRadius()
+{
+	InitialRadius = TriggerComponent->GetUnscaledSphereRadius();
+	TargetRadius = DefaultRadius * TargetScale;
+}
+
+void ALifeArea::AnimateScale(const float Progress)
+{
+	TriggerComponent->SetSphereRadius(FMath::Lerp(InitialRadius, TargetRadius, Progress));
 }
