@@ -87,7 +87,7 @@ void ASessionPlayerController::OnSessionStateChanged(const ESessionState NewStat
 
 	default:
 		CurrentMouseCursor = EMouseCursor::Crosshairs;
-		ToggleInput(false, true, InputMode);
+		ToggleInput(false, true, FInputModeUIOnly());
 		break;
 	}
 }
