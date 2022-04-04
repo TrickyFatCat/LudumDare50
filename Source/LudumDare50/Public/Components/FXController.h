@@ -15,6 +15,9 @@ struct FFXData
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="VFX")
 	UParticleSystem* ImpactEffect = nullptr;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="SFX")
+	FVector ImpactScale = FVector::OneVector;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="SFX")
 	USoundCue* Sound;
@@ -36,6 +39,7 @@ public:
 	                           ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
 	void PlayFXAtPoint(const FHitResult& HitResult);
 
 protected:
