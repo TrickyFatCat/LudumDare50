@@ -32,7 +32,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable)
 	FOnPickupDeactivatedSignature OnPickupDeactivated;
-	
+
 	UFUNCTION(BlueprintGetter, Category="Pickup")
 	bool GetDestroyOnEffectActivation() const { return bDestroyOnEffectActivation; }
 
@@ -43,11 +43,11 @@ public:
 	void ActivatePickup();
 
 	virtual void ActivatePickup_Implementation();
-	
+
 protected:
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="Components")
 	USceneComponent* PickupRoot = nullptr;
-	
+
 	UPROPERTY(VisibleDefaultsOnly, BlueprintReadOnly, Category="Components")
 	UInteractionSphereComponent* InteractionTrigger = nullptr;
 
@@ -56,7 +56,7 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnPickupDeactivation();
-	
+
 	UFUNCTION(BlueprintNativeEvent, Category="Pickup")
 	bool ActivatePickupEffect(AActor* TargetActor);
 
@@ -69,10 +69,16 @@ protected:
 
 	virtual void DeactivatePickup_Implementation();
 
+	UFUNCTION(BlueprintImplementableEvent, Category="Pickup")
+	void OnDestroyByTime();
+	
+	UPROPERTY(BlueprintReadOnly)
+	FTimerHandle DestroyTimerHandle;
+
 private:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="Pickup", meta=(AllowPrivateAccess="true"))
 	USoundCue* PickupSound = nullptr;
-	
+
 	virtual bool ProcessInteraction_Implementation(AActor* TargetActor) override;
 
 	UFUNCTION()
@@ -96,7 +102,7 @@ private:
 	 */
 	UPROPERTY(EditDefaultsOnly, Category="Pickup", meta=(EditCondition="bRequireInteraction"))
 	bool bRequireLineOfSight = false;
-	
+
 	/**
 	 * If true, the pickup will be destroyed, else it'll be deactivated and hidden in game.
 	 */
@@ -106,6 +112,13 @@ private:
 		Category="Pickup",
 		meta=(AllowPrivateAccess="true"))
 	bool bDestroyOnEffectActivation = true;
+
+	UPROPERTY(EditDefaultsOnly, Category="Pickup")
+	bool bDestroyByTime = false;
+
+	UPROPERTY(EditDefaultsOnly, Category="Pickup", meta=(EditCondition="bDestroyByTime"))
+	float DestroyTime = 5.f;
+
 
 	// Animation
 private:

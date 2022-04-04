@@ -27,6 +27,11 @@ void APickupBase::BeginPlay()
 	InteractionTrigger->bRequireLineOfSight = bRequireLineOfSight;
 	InteractionTrigger->OnComponentBeginOverlap.AddDynamic(this, &APickupBase::OnTriggerBeginOverlap);
 
+	if (bDestroyByTime)
+	{
+		GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &APickupBase::OnDestroyByTime, DestroyTime);
+	}
+
 	Super::BeginPlay();
 }
 
