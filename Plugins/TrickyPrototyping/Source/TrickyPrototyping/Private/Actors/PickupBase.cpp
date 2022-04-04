@@ -56,7 +56,8 @@ bool APickupBase::ActivatePickupEffect_Implementation(AActor* TargetActor)
 
 void APickupBase::DestroyPickup()
 {
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupSound, GetActorLocation());
+	// UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupSound, GetActorLocation());
+	UGameplayStatics::PlaySound2D(GetWorld(), PickupSound);
 	InteractionTrigger->SetIsEnabled(false);
 	Destroy();
 }
@@ -64,6 +65,7 @@ void APickupBase::DestroyPickup()
 void APickupBase::DeactivatePickup_Implementation()
 {
 	MeshScene->SetHiddenInGame(true, true);
+	UGameplayStatics::PlaySound2D(GetWorld(), PickupSound);
 	InteractionTrigger->SetIsEnabled(false);
 	OnPickupDeactivated.Broadcast();
 	OnPickupDeactivation();
