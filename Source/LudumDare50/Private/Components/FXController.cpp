@@ -30,7 +30,8 @@ void UFXController::PlayFXAtPoint(const FHitResult& HitResult)
 	UGameplayStatics::SpawnEmitterAtLocation(World,
 	                                         FxData.ImpactEffect,
 	                                         HitResult.ImpactPoint,
-	                                         HitResult.ImpactNormal.Rotation());
+	                                         HitResult.ImpactNormal.Rotation(),
+	                                         FxData.ImpactScale);
 
 	UGameplayStatics::PlaySoundAtLocation(World, FxData.Sound, HitResult.ImpactPoint);
 }
