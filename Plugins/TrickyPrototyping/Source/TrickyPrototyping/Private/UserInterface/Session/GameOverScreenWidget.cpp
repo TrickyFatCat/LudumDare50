@@ -83,8 +83,8 @@ void UGameOverScreenWidget::OnResponseReceived(FHttpRequestPtr Request, FHttpRes
 	for (auto Player: ResponseObj->AsArray())
 	{
 		UPlayerStatWidget* PlayerStat = CreateWidget<UPlayerStatWidget>(this, PlayerStatRowWidgetClass);
-		PlayerStat->SetUsername(Player->AsObject()->GetStringField("username"));
-		PlayerStat->SetScore(FString::FromInt(Player->AsObject()->GetNumberField("score")));
+		PlayerStat->SetUsername(Player->AsObject()->GetStringField("username"), MyShinyNewInt == Player->AsObject()->GetNumberField("id"));
+		PlayerStat->SetScore(FString::FromInt(Player->AsObject()->GetNumberField("score")), MyShinyNewInt == Player->AsObject()->GetNumberField("id"));
 		Stats->AddChildToVerticalBox(PlayerStat);
 	}
 	StatHeader->SetVisibility(ESlateVisibility::Visible);
@@ -94,7 +94,9 @@ void UGameOverScreenWidget::OnResponseReceived1(FHttpRequestPtr Request, FHttpRe
 {
 	if (bSuccess == false) return;
 	FString Level = GetWorld()->GetMapName();
-
+	
+	MyShinyNewInt = FCString::Atoi(*Response->GetContentAsString());
+	
 	FHttpRequestRef Request2 = FHttpModule::Get().CreateRequest();
 	Request2->OnProcessRequestComplete().BindUObject(this, &UGameOverScreenWidget::OnResponseReceived);
 	Request2->SetURL("http://188.68.208.161:8000/score/" + Level);
@@ -109,7 +111,7 @@ void UGameOverScreenWidget::ShowStat()
 	FString Level = GetWorld()->GetMapName();
 
 	RequestObj->SetStringField("level", GetWorld()->GetMapName());
-	RequestObj->SetNumberField("score",  FMath::RoundToInt(Time * 10));
+	RequestObj->SetNumberField("score",  FMath::FloorToInt(Time * 10.0));
 
 	FString RequestBody;
 	auto Writer = TJsonWriterFactory<>::Create(&RequestBody);

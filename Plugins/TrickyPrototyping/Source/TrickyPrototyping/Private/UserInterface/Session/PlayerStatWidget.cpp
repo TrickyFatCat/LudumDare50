@@ -5,12 +5,14 @@
 
 #include "Components/TextBlock.h"
 
-void UPlayerStatWidget::SetUsername(const FString& Text)
+void UPlayerStatWidget::SetUsername(const FString& Text, bool isPlayer)
 {
 	PlayerNameTextBlock->SetText(FText::FromString(Text));
+	if (isPlayer) PlayerNameTextBlock->SetColorAndOpacity(PlayerColor);
 }
 
-void UPlayerStatWidget::SetScore(const FString& Text)
+void UPlayerStatWidget::SetScore(const FString& Text, bool isPlayer)
 {
 	StatBlock->SetText(FText::FromString(Text));
+	if (isPlayer) StatBlock->SetColorAndOpacity(PlayerColor);
 }

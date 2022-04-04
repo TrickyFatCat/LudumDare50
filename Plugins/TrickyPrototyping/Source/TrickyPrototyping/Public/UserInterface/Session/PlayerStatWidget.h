@@ -13,8 +13,8 @@ class TRICKYPROTOTYPING_API UPlayerStatWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-	void SetUsername (const FString& Text);
-	void SetScore (const FString& Text);
+	void SetUsername (const FString& Text, bool isPlayer);
+	void SetScore (const FString& Text, bool isPlayer);
 	
 protected:
 	UPROPERTY(meta=(BindWidget))
@@ -22,4 +22,7 @@ protected:
 
 	UPROPERTY(meta=(BindWidget))
 	UTextBlock* StatBlock;
+
+	UPROPERTY(EditAnywhere)
+	FSlateColor PlayerColor;
 };

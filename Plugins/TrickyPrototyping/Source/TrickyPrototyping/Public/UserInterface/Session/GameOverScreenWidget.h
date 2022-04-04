@@ -35,7 +35,8 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> PlayerStatRowWidgetClass;
-	
+	int32 MyShinyNewInt;
+
 private:
 	virtual void OnTransitionScreenShowed() override;
 	
