@@ -10,6 +10,11 @@ ALifeArea::ALifeArea()
 	TriggerComponent = CreateDefaultSubobject<UBaseSphereTriggerComponent>("TriggerComponent");
 	TriggerComponent->SetupAttachment(GetRootComponent());
 	TriggerComponent->SetSphereRadius(DefaultRadius);
+
+	EffectMesh = CreateDefaultSubobject<UStaticMeshComponent>("EffectMesh");
+	EffectMesh->SetupAttachment(TriggerComponent);
+	EffectMesh->SetRelativeScale3D(DefaultEffectScale);
+	EffectMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ALifeArea::BeginPlay()
@@ -62,9 +67,13 @@ void ALifeArea::CalculateRadius()
 {
 	InitialRadius = TriggerComponent->GetUnscaledSphereRadius();
 	TargetRadius = DefaultRadius * TargetScale;
+	InitialEffectScale = EffectMesh->GetRelativeScale3D();
+	TargetEffectScale = DefaultEffectScale * TargetScale;
+	TargetEffectScale.Z = DefaultEffectScale.Z;
 }
 
 void ALifeArea::AnimateScale(const float Progress)
 {
 	TriggerComponent->SetSphereRadius(FMath::Lerp(InitialRadius, TargetRadius, Progress));
+	EffectMesh->SetRelativeScale3D(FMath::Lerp(InitialEffectScale, TargetEffectScale, Progress));
 }

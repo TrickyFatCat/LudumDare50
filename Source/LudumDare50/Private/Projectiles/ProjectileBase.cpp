@@ -23,6 +23,7 @@ AProjectileBase::AProjectileBase()
 
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>("ProjectileMesh");
 	ProjectileMesh->SetupAttachment(GetRootComponent());
+	ProjectileMesh->CastShadow = false;
 
 	ProjectileFX = CreateDefaultSubobject<UFXController>("ProjectileFX");
 }
