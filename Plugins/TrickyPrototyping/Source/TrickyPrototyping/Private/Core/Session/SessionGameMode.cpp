@@ -126,6 +126,7 @@ void ASessionGameMode::StartSession()
 
 void ASessionGameMode::FinishSession(const bool bResult)
 {
+	FinalTime = GetSessionElapsedTime();
 	bIsWinning = bResult;
 	SetSessionState(ESessionState::GameOver);
 }
