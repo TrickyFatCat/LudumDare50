@@ -36,7 +36,7 @@ bool ASpawnMonsterActor::Spawn(UClass* Monster)
 	if (Actor == nullptr) return false;
 
 	FHitResult HitResult;
-	HitResult.ImpactPoint = Location;
+	HitResult.ImpactPoint = Actor->GetActorLocation();
 	ProjectileFX->PlayFXAtPoint(HitResult);
 
 	Cast<AEnemyCharacter>(Actor)->GetMesh()->SetVisibility(true);
