@@ -4,6 +4,7 @@
 #include "SpawnSystem/SpawnMonsterActor.h"
 
 #include "Characters/EnemyCharacter.h"
+#include "Components/FXController.h"
 #include "Components/SphereComponent.h"
 #include "Navigation/PathFollowingComponent.h"
 
@@ -19,6 +20,8 @@ ASpawnMonsterActor::ASpawnMonsterActor()
 
 	CollisionComponent->OnComponentBeginOverlap.AddDynamic(this, &ASpawnMonsterActor::OnOverlap);
 	CollisionComponent->OnComponentEndOverlap.AddDynamic(this, &ASpawnMonsterActor::OnEndOverlap);
+
+	ProjectileFX = CreateDefaultSubobject<UFXController>("ProjectileFX");
 }
 
 bool ASpawnMonsterActor::Spawn(UClass* Monster)
@@ -31,6 +34,10 @@ bool ASpawnMonsterActor::Spawn(UClass* Monster)
 	const auto Rotation = GetActorRotation();
 	const auto Actor = GetWorld()->SpawnActor(Monster, &Location, &Rotation);
 	if (Actor == nullptr) return false;
+
+	FHitResult HitResult;
+	HitResult.ImpactPoint = Location;
+	ProjectileFX->PlayFXAtPoint(HitResult);
 
 	Cast<AEnemyCharacter>(Actor)->GetMesh()->SetVisibility(true);
 	State = EWaveState::Frozen;
