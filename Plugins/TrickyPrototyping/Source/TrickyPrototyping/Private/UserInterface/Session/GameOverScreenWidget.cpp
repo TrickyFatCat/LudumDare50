@@ -66,12 +66,14 @@ float UGameOverScreenWidget::GetFinalTime()
 
 	if (!SessionGameMode) return -1.f;
 
-	if ( SessionGameMode->GetFinalTime() > 0) Time = SessionGameMode->GetFinalTime();
+	Time = SessionGameMode->GetFinalTime();
 	return Time;
 }
 
 void UGameOverScreenWidget::OnResponseReceived(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bSuccess)
 {
+	if (bSuccess == false) return;
+	
 	UE_LOG(LogGameOverScreen, Display, TEXT("username: %s"), *Response->GetContentAsString());
 	TSharedPtr<FJsonValue> ResponseObj;
 	auto Reader = TJsonReaderFactory<>::Create(Response->GetContentAsString());
@@ -82,9 +84,22 @@ void UGameOverScreenWidget::OnResponseReceived(FHttpRequestPtr Request, FHttpRes
 	{
 		UPlayerStatWidget* PlayerStat = CreateWidget<UPlayerStatWidget>(this, PlayerStatRowWidgetClass);
 		PlayerStat->SetUsername(Player->AsObject()->GetStringField("username"));
-		PlayerStat->SetScore(Player->AsObject()->GetStringField("score"));
+		PlayerStat->SetScore(FString::FromInt(Player->AsObject()->GetNumberField("score")));
 		Stats->AddChildToVerticalBox(PlayerStat);
 	}
+	StatHeader->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UGameOverScreenWidget::OnResponseReceived1(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bSuccess)
+{
+	if (bSuccess == false) return;
+	FString Level = GetWorld()->GetMapName();
+
+	FHttpRequestRef Request2 = FHttpModule::Get().CreateRequest();
+	Request2->OnProcessRequestComplete().BindUObject(this, &UGameOverScreenWidget::OnResponseReceived);
+	Request2->SetURL("http://188.68.208.161:8000/score/" + Level);
+	Request2->SetVerb("GET");
+	Request2->ProcessRequest();
 }
 
 void UGameOverScreenWidget::ShowStat()
@@ -100,16 +115,11 @@ void UGameOverScreenWidget::ShowStat()
 	auto Writer = TJsonWriterFactory<>::Create(&RequestBody);
 	FJsonSerializer::Serialize(RequestObj, Writer);
 
-	//Request->OnProcessRequestComplete().BindUObject(this, &UGameOverScreenWidget::OnResponseRecived);
 	Request->SetURL("http://188.68.208.161:8000/score");
 	Request->SetVerb("POST");
 	Request->SetHeader("Content-Type", "application/json");
+	Request->OnProcessRequestComplete().BindUObject(this, &UGameOverScreenWidget::OnResponseReceived1);
 	Request->SetContentAsString(RequestBody);
 	Request->ProcessRequest();
 
-	FHttpRequestRef Request2 = FHttpModule::Get().CreateRequest();
-	Request2->OnProcessRequestComplete().BindUObject(this, &UGameOverScreenWidget::OnResponseReceived);
-	Request2->SetURL("http://188.68.208.161:8000/score/" + Level);
-	Request2->SetVerb("GET");
-	Request2->ProcessRequest();
 }

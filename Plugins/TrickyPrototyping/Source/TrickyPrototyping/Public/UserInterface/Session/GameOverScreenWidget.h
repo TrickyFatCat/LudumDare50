@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Components/TextBlock.h"
 #include "Components/VerticalBox.h"
 #include "Interfaces/IHttpRequest.h"
 #include "UserInterface/Session/BaseSessionScreenWidget.h"
@@ -29,6 +30,9 @@ protected:
 	UPROPERTY(meta=(BindWidget))
 	UVerticalBox* Stats = nullptr;
 
+	UPROPERTY(meta=(BindWidget))
+	UTextBlock* StatHeader = nullptr;
+	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "UI")
 	TSubclassOf<UUserWidget> PlayerStatRowWidgetClass;
 	
@@ -44,6 +48,7 @@ private:
 	float GetFinalTime();
 
 	void OnResponseReceived(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bSuccess);
+	void OnResponseReceived1(FHttpRequestPtr Request, FHttpResponsePtr Response, bool bSuccess);
 	UFUNCTION(BlueprintCallable)
 	void ShowStat();
 
