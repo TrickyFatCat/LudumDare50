@@ -7,6 +7,7 @@
 #include "Components/Button.h"
 #include "Components/HorizontalBox.h"
 #include "Components/TextBlock.h"
+#include "Core/TrickyFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Core/TrickyGameInstance.h"
 #include "Core/Session/SessionGameMode.h"
@@ -82,9 +83,10 @@ void UGameOverScreenWidget::OnResponseReceived(FHttpRequestPtr Request, FHttpRes
 	Stats->ClearChildren();
 	for (auto Player: ResponseObj->AsArray())
 	{
+		
 		UPlayerStatWidget* PlayerStat = CreateWidget<UPlayerStatWidget>(this, PlayerStatRowWidgetClass);
 		PlayerStat->SetUsername(Player->AsObject()->GetStringField("username"), MyShinyNewInt == Player->AsObject()->GetNumberField("id"));
-		PlayerStat->SetScore(FString::FromInt(Player->AsObject()->GetNumberField("score")), MyShinyNewInt == Player->AsObject()->GetNumberField("id"));
+		PlayerStat->SetScore(UTrickyFunctionLibrary::ConvertTimeSeconds(Player->AsObject()->GetNumberField("score")/10, ETimeFormat::MM_SS_Ms), MyShinyNewInt == Player->AsObject()->GetNumberField("id"));
 		Stats->AddChildToVerticalBox(PlayerStat);
 	}
 	StatHeader->SetVisibility(ESlateVisibility::Visible);
