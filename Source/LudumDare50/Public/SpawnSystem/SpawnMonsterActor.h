@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "SpawnMonsterActor.generated.h"
 
+class UFXController;
 class USphereComponent;
 UENUM(BlueprintType)
 enum class EWaveState: uint8
@@ -38,6 +39,9 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere, Category="Wave")
 	USphereComponent* CollisionComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components", meta=(AllowPrivateAccess="true"))
+	UFXController* ProjectileFX = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Wave")
 	int WaveId = 1;
