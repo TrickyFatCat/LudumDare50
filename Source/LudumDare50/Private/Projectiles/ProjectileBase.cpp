@@ -23,13 +23,13 @@ AProjectileBase::AProjectileBase()
 
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>("ProjectileMesh");
 	ProjectileMesh->SetupAttachment(GetRootComponent());
+	ProjectileMesh->CastShadow = false;
 
 	ProjectileFX = CreateDefaultSubobject<UFXController>("ProjectileFX");
 }
 
 void AProjectileBase::BeginPlay()
 {
-	Super::BeginPlay();
 	ProjectileMovement->Velocity = ShotDirection * ProjectileMovement->InitialSpeed;
 	ProjectileCollision->IgnoreActorWhenMoving(GetOwner(), true);
 	ProjectileCollision->OnComponentHit.AddDynamic(this, &AProjectileBase::OnProjectileHit);
@@ -44,6 +44,7 @@ void AProjectileBase::BeginPlay()
 	{
 		ProjectileMovement->bShouldBounce = ProjectileData.bIsBouncing;
 	}
+	Super::BeginPlay();
 }
 
 void AProjectileBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -63,6 +64,7 @@ void AProjectileBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 void AProjectileBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
 }
 
 void AProjectileBase::GetProjectileData(FProjectileData& Data) const

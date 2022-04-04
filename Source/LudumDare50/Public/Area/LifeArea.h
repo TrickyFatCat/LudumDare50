@@ -31,6 +31,8 @@ public:
 protected:
 	UPROPERTY(VisibleAnywhere)
 	float DefaultRadius = 512.f;
+
+	FVector DefaultEffectScale = FVector(10.f, 10.f, 10.f);
 	
 	UPROPERTY(VisibleAnywhere)
 	float InitialRadius = DefaultRadius;
@@ -41,8 +43,15 @@ protected:
 	UPROPERTY(BlueprintSetter=SetTargetScale, BlueprintGetter=GetTargetScale, Category="FloatingActor|Points")
 	float TargetScale = 1.f;
 
+	FVector TargetEffectScale = DefaultEffectScale;
+
+	FVector InitialEffectScale = DefaultEffectScale;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
 	UBaseSphereTriggerComponent* TriggerComponent = nullptr;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Components")
+	UStaticMeshComponent* EffectMesh = nullptr;
 
 	virtual void MoveActor(const float Progress) override;
 
