@@ -3,6 +3,7 @@
 
 #include "Core/Session/SessionPlayerController.h"
 
+#include "Blueprint/UserWidget.h"
 #include "Core/Session/SessionGameMode.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -13,6 +14,12 @@ ASessionPlayerController::ASessionPlayerController()
 void ASessionPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (CrosshairWidgetClass)
+	{
+		CrosshairWidget = CreateWidget<UUserWidget>(GetWorld(), CrosshairWidgetClass);
+		SetMouseCursorWidget(EMouseCursor::Crosshairs, CrosshairWidget);
+	}
 
 	UWorld* World = GetWorld();
 
@@ -55,23 +62,31 @@ void ASessionPlayerController::OnSessionStateChanged(const ESessionState NewStat
 		SetInputMode(InputMode);
 	};
 	
+	FInputModeGameAndUI InputMode;
+	InputMode.SetHideCursorDuringCapture(false);
+	InputMode.SetLockMouseToViewportBehavior(EMouseLockMode::DoNotLock);
+	
 	switch (NewState)
 	{
 	case ESessionState::Progress:
-		ToggleInput(true, bShowCursorOnStart, FInputModeGameOnly());
+		CurrentMouseCursor = EMouseCursor::Crosshairs;
+		ToggleInput(true, bShowCursorOnStart, InputMode);
 		break;
 
 	case ESessionState::GameOver:
+		CurrentMouseCursor = EMouseCursor::Default;
 		ToggleInput(false, true, FInputModeUIOnly());
 		StopMovement();
 		GetPawn()->TurnOff();
 		break;
 
 	case ESessionState::Pause:
+		CurrentMouseCursor = EMouseCursor::Default;
 		ToggleInput(true, true, FInputModeGameAndUI());
 		break;
 
 	default:
+		CurrentMouseCursor = EMouseCursor::Crosshairs;
 		ToggleInput(false, true, FInputModeUIOnly());
 		break;
 	}

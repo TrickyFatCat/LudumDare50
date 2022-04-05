@@ -27,7 +27,9 @@ public class TrickyPrototyping : ModuleRules
 			{
 				"Core",
 				"InputCore",
-				"UMG"
+				"UMG",
+				"HTTP",
+				"Json"
 				// ... add other public dependencies that you statically link with here ...
 			}
 			);

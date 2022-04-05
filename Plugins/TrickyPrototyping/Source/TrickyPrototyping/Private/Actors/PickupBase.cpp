@@ -26,7 +26,12 @@ void APickupBase::BeginPlay()
 	InteractionTrigger->SetIsNormalTrigger(!bRequireInteraction);
 	InteractionTrigger->bRequireLineOfSight = bRequireLineOfSight;
 	InteractionTrigger->OnComponentBeginOverlap.AddDynamic(this, &APickupBase::OnTriggerBeginOverlap);
-	
+
+	if (bDestroyByTime)
+	{
+		GetWorldTimerManager().SetTimer(DestroyTimerHandle, this, &APickupBase::OnDestroyByTime, DestroyTime);
+	}
+
 	Super::BeginPlay();
 }
 
@@ -34,16 +39,13 @@ void APickupBase::Tick(float DeltaTime)
 {
 	AnimatePosition();
 	AnimateRotation();
-	
+
 	Super::Tick(DeltaTime);
 }
 
 void APickupBase::ActivatePickup_Implementation()
 {
-	if (!GetRootComponent()->bHiddenInGame) return;
-
-	GetRootComponent()->SetHiddenInGame(false, true);
-	PrimaryActorTick.bCanEverTick = true;
+	MeshScene->SetHiddenInGame(false, true);
 	InteractionTrigger->SetIsEnabled(true);
 }
 
@@ -54,16 +56,19 @@ bool APickupBase::ActivatePickupEffect_Implementation(AActor* TargetActor)
 
 void APickupBase::DestroyPickup()
 {
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupSound, GetActorLocation());
+	// UGameplayStatics::PlaySoundAtLocation(GetWorld(), PickupSound, GetActorLocation());
+	UGameplayStatics::PlaySound2D(GetWorld(), PickupSound);
 	InteractionTrigger->SetIsEnabled(false);
 	Destroy();
 }
 
 void APickupBase::DeactivatePickup_Implementation()
 {
-	GetRootComponent()->SetHiddenInGame(true, true);
-	PrimaryActorTick.bCanEverTick = false;
+	MeshScene->SetHiddenInGame(true, true);
+	UGameplayStatics::PlaySound2D(GetWorld(), PickupSound);
 	InteractionTrigger->SetIsEnabled(false);
+	OnPickupDeactivated.Broadcast();
+	OnPickupDeactivation();
 }
 
 bool APickupBase::ProcessInteraction_Implementation(AActor* TargetActor)
@@ -90,7 +95,7 @@ void APickupBase::OnTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent
 
 	if (ActivatePickupEffect(OtherActor))
 	{
-		DestroyPickup();
+		bDestroyOnEffectActivation ? DestroyPickup() : DeactivatePickup();
 	}
 }
 
