@@ -46,9 +46,10 @@ bool ULifeTimeComponent::IncreaseRemainingTime(const float Amount)
 
 	if (TimerManager.IsTimerActive(LifeTimerHandle))
 	{
-		RemainingLifeTime += TimerManager.GetTimerRemaining(LifeTimerHandle) + Amount;
-		RemainingLifeTime = FMath::Min(RemainingLifeTime, LifeTimerDuration);
+		RemainingLifeTime = TimerManager.GetTimerRemaining(LifeTimerHandle);
 		TimerManager.ClearTimer(LifeTimerHandle);
+		RemainingLifeTime += Amount;
+		RemainingLifeTime = FMath::Min(RemainingLifeTime, LifeTimerDuration);
 		TimerManager.SetTimer(LifeTimerHandle,
 		                      this,
 		                      &ULifeTimeComponent::DamageOwner,
