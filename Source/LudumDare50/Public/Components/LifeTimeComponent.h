@@ -6,6 +6,8 @@
 #include "Components/ActorComponent.h"
 #include "LifeTimeComponent.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLifeTimeExpiredSignature);
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class LUDUMDARE50_API ULifeTimeComponent : public UActorComponent
 {
@@ -13,6 +15,9 @@ class LUDUMDARE50_API ULifeTimeComponent : public UActorComponent
 
 public:
 	ULifeTimeComponent();
+
+	UPROPERTY(BlueprintCallable)
+	FOnLifeTimeExpiredSignature OnLifeTimeExpired;
 
 	UFUNCTION(BlueprintSetter, Category="LifeTime")
 	void SetLifeTimeDuration(const float Value);
