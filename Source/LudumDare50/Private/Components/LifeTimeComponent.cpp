@@ -152,6 +152,8 @@ void ULifeTimeComponent::DamageOwner()
 
 	if (!DamageControllerComponent) return;
 
+	DamageControllerComponent->SetIsInvulnerable(false);
+	DamageControllerComponent->SetGeneralDamageModifier(1.f);
 	UGameplayStatics::ApplyDamage(GetOwner(), DamageControllerComponent->GetHealth(), nullptr, nullptr, nullptr);
 	bIsInevitable = true;
 }
