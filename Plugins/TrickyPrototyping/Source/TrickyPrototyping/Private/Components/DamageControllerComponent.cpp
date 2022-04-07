@@ -77,7 +77,7 @@ void UDamageControllerComponent::BroadcastOnMaxHealthChanged(const float NewMaxH
 
 void UDamageControllerComponent::SetGeneralDamageModifier(const float NewModifier)
 {
-	if (NewModifier <= 0.f) return;
+	if (NewModifier <0.f) return;
 
 	GeneralDamageModifier = NewModifier;
 }
