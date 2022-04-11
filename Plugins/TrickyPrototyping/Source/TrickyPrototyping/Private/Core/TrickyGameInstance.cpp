@@ -38,3 +38,10 @@ FName UTrickyGameInstance::GetNextLevelName() const
 
 	return NextLevelName;
 }
+
+FName UTrickyGameInstance::GetLevelName(const int32 LevelIndex) const
+{
+	if (LevelIndex < 0 || LevelIndex >= LevelNames.Num()) return NAME_None;
+
+	return LevelNames[LevelIndex];
+}

@@ -20,9 +20,24 @@ void UMainMenuWidget::NativeOnInitialized()
 		TransitionScreen->OnHidden.AddDynamic(this, &UMainMenuWidget::TransitionFinished);
 	}
 
-	if (Button_StartGame)
+	if (Button_StartGame_1)
 	{
-		Button_StartGame->OnClicked.AddDynamic(this, &UMainMenuWidget::OnStartGame);
+		Button_StartGame_1->OnClicked.AddDynamic(this, &UMainMenuWidget::StartLevel1);
+	}
+	
+	if (Button_StartGame_2)
+	{
+		Button_StartGame_2->OnClicked.AddDynamic(this, &UMainMenuWidget::StartLevel2);
+	}
+	
+	if (Button_StartGame_3)
+	{
+		Button_StartGame_3->OnClicked.AddDynamic(this, &UMainMenuWidget::StartLevel3);
+	}
+
+	if (Button_StartGame_4)
+	{
+		Button_StartGame_4->OnClicked.AddDynamic(this, &UMainMenuWidget::StartLevel4);
 	}
 
 	if (Button_QuitGame)
@@ -58,7 +73,7 @@ void UMainMenuWidget::ProcessTransition()
 	switch (Command)
 	{
 	case ETransitionCommand::Start:
-		UGameplayStatics::OpenLevel(this, GameInstance->GetStartLevelName());
+		UGameplayStatics::OpenLevel(this, GameInstance->GetLevelName(StartLevelIndex));
 		break;
 
 	case ETransitionCommand::Quit:
@@ -67,11 +82,12 @@ void UMainMenuWidget::ProcessTransition()
 	}
 }
 
-void UMainMenuWidget::OnStartGame()
+void UMainMenuWidget::OnStartGame(const int32 LevelIndex)
 {
 	Command = ETransitionCommand::Start;
 	SetCursorVisibility(false);
 	StartTransition();
+	StartLevelIndex = LevelIndex;
 }
 
 void UMainMenuWidget::OnQuitGame()

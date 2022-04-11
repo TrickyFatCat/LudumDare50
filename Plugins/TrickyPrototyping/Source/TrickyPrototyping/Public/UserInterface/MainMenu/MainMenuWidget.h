@@ -31,7 +31,16 @@ protected:
 	UTransitionScreenWidget* TransitionScreen = nullptr;
 
 	UPROPERTY(meta=(BindWidget))
-	UButton* Button_StartGame = nullptr;
+	UButton* Button_StartGame_1 = nullptr;
+	
+	UPROPERTY(meta=(BindWidget))
+	UButton* Button_StartGame_2 = nullptr;
+	
+	UPROPERTY(meta=(BindWidget))
+	UButton* Button_StartGame_3 = nullptr;
+	
+	UPROPERTY(meta=(BindWidget))
+	UButton* Button_StartGame_4 = nullptr;
 
 	UPROPERTY(meta=(BindWidget))
 	UButton* Button_QuitGame = nullptr;
@@ -39,14 +48,28 @@ protected:
 private:
 	ETransitionCommand Command = ETransitionCommand::None;
 
+	int32 StartLevelIndex = 0;
+
 	UFUNCTION()
 	void TransitionFinished();
 
 	UFUNCTION()
 	void ProcessTransition();
+
+	UFUNCTION()
+	void StartLevel1() {OnStartGame(0);}
 	
 	UFUNCTION()
-	void OnStartGame();
+	void StartLevel2() {OnStartGame(1);}
+	
+	UFUNCTION()
+	void StartLevel3() {OnStartGame(2);}
+	
+	UFUNCTION()
+	void StartLevel4() {OnStartGame(3);}
+	
+	UFUNCTION()
+	void OnStartGame(const int32 LevelIndex);
 
 	UFUNCTION()
 	void OnQuitGame();

@@ -23,6 +23,8 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category="Levels")
 	FName GetNextLevelName() const;
+
+	FName GetLevelName(const int32 LevelIndex) const;
 	
 protected:
 	UPROPERTY(EditDefaultsOnly, Category="Levels")
