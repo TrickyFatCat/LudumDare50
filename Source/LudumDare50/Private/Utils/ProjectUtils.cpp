@@ -16,10 +16,13 @@ void UProjectUtils::SpawnProjectile(TSubclassOf<AProjectileBase> ProjectileClass
 {
 	for (int32 i = 1; i <= Amount; i++)
 	{
-		const float SpreadAngleRad = FMath::DegreesToRadians(Spread / 2);
-		Direction = FMath::VRandCone(Direction, SpreadAngleRad);
-		Direction.Z = 0.f;
+		if (i > 1)
+		{
+			const float SpreadAngleRad = FMath::DegreesToRadians(Spread / 2);
+			Direction = FMath::VRandCone(Direction, SpreadAngleRad);
+		}
 		
+		Direction.Z = 0.f;
 		const FTransform SpawnTransform(FRotator::ZeroRotator, Position);
 		AProjectileBase* Projectile = Owner->GetWorld()->SpawnActorDeferred<AProjectileBase>(
 			ProjectileClass,
